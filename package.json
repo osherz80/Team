@@ -1,0 +1,33 @@
+{
+  "name": "team",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osherz80/Team.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/osherz80/Team/issues"
+  },
+  "homepage": "https://github.com/osherz80/Team#readme",
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.9",
+    "@langchain/google-genai": "^2.3.0",
+    "@langchain/langgraph": "^1.4.12",
+    "@langchain/openai": "^1.5.10",
+    "zod": "^4.4.3"
+  }
+}

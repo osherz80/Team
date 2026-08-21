@@ -17,7 +17,7 @@ async function main() {
     const result = await graph.invoke(initialInput);
     console.log(result.subtasks)
     result.subtasks.forEach((subtask: string, index: number) => {
-        console.log(`${index + 1}. ${subtask}`);
+        console.log(`${subtask}`);
     });
 }
 

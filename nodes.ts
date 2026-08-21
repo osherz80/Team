@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { geminiModel } from "./llm.ts"
 import type { AgentStateType } from "./state.ts";
+import { teamLeadPrompt } from "./prompts/teamLead.ts";
 
 const SubtasksSchema = z.object({
     subtasks: z
@@ -13,9 +14,7 @@ export async function teamLeadNode(state: AgentStateType) {
 
     const structuredLlm = geminiModel.withStructuredOutput(SubtasksSchema);
 
-    const prompt = `you are a senior software developer team leader,
-    you need to take a task and break it down into subtasks,
-    the task is: ${state.task}`
+    const prompt = teamLeadPrompt(state.task)
     const response = await structuredLlm.invoke(prompt);
     console.log(`✅ [Team Lead] done, the task was broken down into ${response.subtasks.length} subtasks.`);
 

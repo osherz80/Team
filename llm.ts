@@ -8,6 +8,9 @@ const localModelName = process.env.LOCAL_LLM_MODEL ?? "Qwen/Qwen2.5-Coder-1.5B";
 
 export function getLLM(): BaseChatModel {
     if (useLocalLLM) {
+        if (!process.env.OPENAI_API_KEY) {
+            process.env.OPENAI_API_KEY = "EMPTY";
+        }
         console.log(`🤖 Using Local vLLM Model: ${localModelName} (${localBaseUrl})`);
         return new ChatOpenAI({
             modelName: localModelName,
@@ -15,6 +18,7 @@ export function getLLM(): BaseChatModel {
             configuration: {
                 baseURL: localBaseUrl,
             },
+            apiKey: "EMPTY",
             openAIApiKey: "EMPTY",
         });
     }

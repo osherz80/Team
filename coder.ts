@@ -38,6 +38,14 @@ export const coderNode = async (state: AgentStateType) => {
         messages: [{ role: "user", content: coderPrompt(currentTask.title, currentTask.dod) }],
     });
 
+    // בדיקה דיאגנוסטית: האם הופעלו הכלים במהלך הרצת הסוכן?
+    const toolMessages = result.messages.filter((m: any) => m._getType() === "tool");
+    console.log(`🔍 [Coder Debug] Total tool executions: ${toolMessages.length}`);
+
+    toolMessages.forEach((tm: any, i: number) => {
+        console.log(`   └─ Tool Call ${i + 1} (${tm.name}): ${tm.content}`);
+    });
+
     const lastMessage = result.messages?.[result.messages.length - 1];
     const codeOutput = lastMessage && typeof lastMessage.content === "string"
         ? lastMessage.content
@@ -50,7 +58,7 @@ export const coderNode = async (state: AgentStateType) => {
         codeOutput,
     };
 
-    console.log(`✅ [Coder] Task ${currentTaskIndex + 1} completed and files written according to DOD.`);
+    console.log(`✅ [Coder] Task ${currentTaskIndex + 1} completed.`);
 
     return {
         subtasks: updatedSubtasks,

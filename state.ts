@@ -1,10 +1,21 @@
 import { Annotation } from "@langchain/langgraph";
 
+export interface SubTask {
+  title: string;
+  dod: string;
+  status: "pending" | "in_progress" | "completed";
+  codeOutput?: string;
+}
+
 export const AgentState = Annotation.Root({
-  task: Annotation<string>(),
-  subtasks: Annotation<string[]>({
-    reducer: (x, y) => y, // מחליף את המערך בתוצאה החדשה
+  mainMission: Annotation<string>(),
+  subtasks: Annotation<SubTask[]>({
+    reducer: (x, y) => y,
     default: () => [],
+  }),
+  currentTaskIndex: Annotation<number>({
+    reducer: (x, y) => y,
+    default: () => 0,
   }),
 });
 

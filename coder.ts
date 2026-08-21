@@ -1,17 +1,24 @@
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { geminiModel } from "./llm.ts";
+import { writeFileTool, readFileTool } from "./tools.ts";
 import type { AgentStateType } from "./state.ts";
 
+const coderAgent = createReactAgent({
+    llm: geminiModel,
+    tools: [writeFileTool, readFileTool],
+});
+
 export const coderPrompt = (subtask: string, dod: string) => `
-You are an expert Full-Stack Software Engineer.
+You are an expert Full-Stack Software Engineer equipped with file system tools (read_file, write_file).
 Your current task is: ${subtask}
 Definition of Done (DOD): ${dod}
 
 Instructions:
-1. Plan and implement the complete solution for this subtask.
-2. Review your own implementation strictly against the DOD.
-3. Output the fully working code/solution and explain briefly how it meets the DOD.
-
-Provide clean, production-ready code.
+1. Analyze what files need to be created or updated for this subtask.
+2. Use the 'write_file' tool to actually create or update the required code files in the project workspace (e.g. src/ directory).
+3. If necessary, use 'read_file' to inspect existing files.
+4. Verify that the written code strictly matches the Definition of Done (DOD).
+5. Provide a summary of all files created/modified and explain how the solution meets the DOD.
 `;
 
 export const coderNode = async (state: AgentStateType) => {
@@ -26,18 +33,23 @@ export const coderNode = async (state: AgentStateType) => {
     console.log(`\n💻 [Coder] Executing task ${currentTaskIndex + 1}/${subtasks.length}: "${currentTask.title}"`);
     console.log(`   DOD: ${currentTask.dod}`);
 
-    const response = await geminiModel.invoke([
-        { role: "user", content: coderPrompt(currentTask.title, currentTask.dod) }
-    ]);
+    const result = await coderAgent.invoke({
+        messages: [{ role: "user", content: coderPrompt(currentTask.title, currentTask.dod) }],
+    });
+
+    const lastMessage = result.messages?.[result.messages.length - 1];
+    const codeOutput = lastMessage && typeof lastMessage.content === "string"
+        ? lastMessage.content
+        : JSON.stringify(lastMessage?.content ?? "");
 
     const updatedSubtasks = [...subtasks];
     updatedSubtasks[currentTaskIndex] = {
         ...currentTask,
         status: "completed",
-        codeOutput: typeof response.content === "string" ? response.content : JSON.stringify(response.content),
+        codeOutput,
     };
 
-    console.log(`✅ [Coder] Task ${currentTaskIndex + 1} completed and checked against DOD.`);
+    console.log(`✅ [Coder] Task ${currentTaskIndex + 1} completed and files written according to DOD.`);
 
     return {
         subtasks: updatedSubtasks,

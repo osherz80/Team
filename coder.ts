@@ -18,7 +18,8 @@ Instructions:
 2. Use the 'write_file' tool to actually create or update the required code files in the project workspace (e.g. src/ directory).
 3. If necessary, use 'read_file' to inspect existing files.
 4. Verify that the written code strictly matches the Definition of Done (DOD).
-5. Provide a summary of all files created/modified and explain how the solution meets the DOD.
+5. You must use the 'write_file' tool to write every file to disk. Do not just output code blocks in text. Always invoke the tool.
+6. Provide a summary of all files created/modified and explain how the solution meets the DOD.
 `;
 
 export const coderNode = async (state: AgentStateType) => {

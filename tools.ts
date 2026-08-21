@@ -9,6 +9,7 @@ export const writeFileTool = tool(
             const fullPath = path.resolve(filePath);
             await fs.mkdir(path.dirname(fullPath), { recursive: true });
             await fs.writeFile(fullPath, content, "utf-8");
+            console.log(`[write_file] Writing to: ${fullPath}`);
             return `File successfully written to ${filePath}`;
         } catch (error: any) {
             return `Error writing file: ${error.message}`;

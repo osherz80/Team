@@ -7,7 +7,7 @@ import { z } from "zod";
 export const writeFileTool = tool(
     async ({ filePath, content }) => {
         try {
-            console.log("in erite tool", cwd())
+            console.log("[write_file] Target directory:", cwd());
             const fullPath = path.resolve(cwd(), filePath);
             await fs.mkdir(path.dirname(fullPath), { recursive: true });
             await fs.writeFile(fullPath, content, "utf-8");

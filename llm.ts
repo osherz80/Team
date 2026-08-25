@@ -4,7 +4,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 
 const useLocalLLM = process.env.USE_LOCAL_LLM === "true";
 const localBaseUrl = process.env.LOCAL_LLM_BASE_URL ?? "http://localhost:8000/v1";
-const localModelName = process.env.LOCAL_LLM_MODEL ?? "Qwen/Qwen2.5-Coder-1.5B";
+const localModelName = process.env.LOCAL_LLM_MODEL ?? "Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8";
 
 export function getLLM(): BaseChatModel {
     if (useLocalLLM) {

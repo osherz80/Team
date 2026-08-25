@@ -1,12 +1,14 @@
 import { tool } from "@langchain/core/tools";
 import fs from "fs/promises";
 import path from "path";
+import { cwd } from "process";
 import { z } from "zod";
 
 export const writeFileTool = tool(
     async ({ filePath, content }) => {
         try {
-            const fullPath = path.resolve(filePath);
+            console.log("in erite tool", cwd())
+            const fullPath = path.resolve(cwd(), filePath);
             await fs.mkdir(path.dirname(fullPath), { recursive: true });
             await fs.writeFile(fullPath, content, "utf-8");
             console.log(`[write_file] Writing to: ${fullPath}`);
